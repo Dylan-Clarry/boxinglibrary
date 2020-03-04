@@ -1,0 +1,17 @@
+.matches {
+	margin-top: 25px;
+}
+
+.match-card {
+
+	border: 2px solid $lt-blue;
+	padding: 15px;
+
+	h2 {
+		text-align: center;
+	}
+}
+
+.match-card:hover {
+	opacity: 0.8;
+}

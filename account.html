@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Football Library</title>
+
+	<!-- links -->
+	<link rel="stylesheet" href="./css/main.css">
+</head>
+<body>
+	<div class="nav">
+		<div class="container">
+			<a id="nav-logo" href="./index.html"><h1 class="nav-title">FOOTBALL LIBRARY</h1></a>
+
+			<div id="navbar-items">
+				<nav>
+					<ul class="nav-list">
+						<li><a href="./dashboard.html">Dashboard</a></li>
+						<li><a href="./account.html">Account</a></li>
+					</ul>
+				</nav>
+			</div><!-- /navbar-desktop -->
+		</div><!-- /container -->
+	</div><!-- /nav -->
+
+	<div id="content">
+		<div id="index" class="container">
+			
+			<div class="login-signup">
+				<h1>FOOTBALL LIBRARY</h1>
+
+				<div id="login-form" class="hide">
+					<h2>Login</h2>
+					<form action="POST" class="account-form">
+						<input type="text" placeholder="Username">
+						<br>
+						<input type="text" placeholder="Password">
+						<br>
+						<button type="submit">Login</button>
+					</form><!-- /account-form -->
+				</div><!-- login-form -->
+
+				<div id="signup-form">
+					<h2>Signup</h2>
+					<form action="POST" class="account-form">
+						<input type="text" placeholder="Username">
+						<br>
+						<input type="text" placeholder="Password">
+						<br>
+						<input type="text" placeholder="Email">
+						<br>
+						<button type="submit">Signup</button>
+					</form><!-- /account-form -->
+				</div><!-- signup-form -->
+				<a id="change-form-type" type-value="0"><u><p>Logging in?</p></u></a>
+			</div><!-- /login-signup -->
+			
+		</div><!-- /container -->
+	</div><!-- /content -->
+
+	<footer>
+		<div class="container">
+			<p><script>document.write(new Date().getFullYear());</script> Football Library. All rights resevered.</p>
+		</div><!-- /container -->
+	</footer>
+
+	<!-- scripts -->
+	<script type="text/javascript" src="./js/dummy.js"></script>
+	<script type="text/javascript" src="./js/account.js"></script>
+</body>
+</html>
