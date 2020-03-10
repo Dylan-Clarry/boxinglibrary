@@ -1,9 +1,0 @@
-// wrapped around rest of content to push under navbar
-#content {
-	background-color: $lt-black;
-	margin-top: $navbar-h;
-	margin-bottom: 0;
-	color: $white;
-	min-height: calc(100vh - 275px); // $footer-h does not work here!
-	overflow: auto;
-}

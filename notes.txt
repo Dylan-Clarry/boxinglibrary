@@ -1,1 +1,0 @@
-- use jquery to implement frontend features such as ajax with rest api and live searchbar
