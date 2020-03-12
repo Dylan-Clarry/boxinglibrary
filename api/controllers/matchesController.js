@@ -32,6 +32,13 @@ exports.getOneMatch = (req, res, next) => {
 // create match
 exports.createMatch = (req, res, next) => {
 
+	/*
+
+Insert into matches(userID,Title, teamID1,teamID2,score1,score2,description,winner)
+values(req.userID,req.title,req.teamID1,req.teamID2,req.score1,req.score2,req.description)
+
+*/
+	
 };
 
 // update Match
