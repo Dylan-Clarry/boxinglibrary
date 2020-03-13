@@ -6,7 +6,7 @@
 loginForm = document.getElementById('login-form');
 signupForm = document.getElementById('signup-form');
 changeFormType = document.getElementById('change-form-type');
-
+//may want to add a forgot password and email them theire account info, maybe something to do in the future
 // click event dynamically changes the account form from signup to login
 if(changeFormType !== null) {
 	changeFormType.addEventListener('click', _ => {
