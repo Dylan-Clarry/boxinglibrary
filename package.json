@@ -4,7 +4,8 @@
   "description": "Full stack webapp project for CP476",
   "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "webpack-dev-server --entry ./src/js/app.js --output-filename ./dist/bundle.js",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -19,5 +20,12 @@
   "bugs": {
     "url": "https://github.com/Dylan-Clarry/footballlibrary/issues"
   },
-  "homepage": "https://github.com/Dylan-Clarry/footballlibrary#readme"
+  "homepage": "https://github.com/Dylan-Clarry/footballlibrary#readme",
+  "dependencies": {
+    "jquery": "^3.5.0"
+  },
+  "devDependencies": {
+    "css-loader": "^3.5.3",
+    "style-loader": "^1.2.0"
+  }
 }
