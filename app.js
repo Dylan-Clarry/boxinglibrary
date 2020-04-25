@@ -5,13 +5,28 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
-
+const mysql = require('mysql')
 // variables
 const app = express();
 
 // ====================
 // database connection
 // ====================
+
+
+const connection = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: 'password',
+  database: 'mydb'
+})
+
+
+
+connection.connect(function(err) {
+    if (err) throw err;
+});
+module.exports = connection;
 
 // use normal promise
 
@@ -44,8 +59,9 @@ app.use((req, res, next) => {
 const matchesRoute = require('./api/routes/matches');
 const usersRoute = require('./api/routes/users');
 
+
 // Routes which handle requests
-app.use('/matches', productsRoute);
+app.use('/matches', matchesRoute);
 app.use('/users', usersRoute);
 
 // error handling
