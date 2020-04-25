@@ -1,0 +1,23 @@
+{
+  "name": "footballlibrary",
+  "version": "1.0.0",
+  "description": "Full stack webapp project for CP476",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dylan-Clarry/footballlibrary.git"
+  },
+  "keywords": [
+    "football",
+    "library"
+  ],
+  "author": "Dylan Clarry",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dylan-Clarry/footballlibrary/issues"
+  },
+  "homepage": "https://github.com/Dylan-Clarry/footballlibrary#readme"
+}
