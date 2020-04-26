@@ -1,10 +1,12 @@
 const { Homepage } = require('./js/pages/Homepage.js');
 const { About } = require('./js/pages/About.js');
 
+const { Navbar } = require('./js/components/Navbar.js');
+const { Footer } = require('./js/components/Footer.js');
+
 const { Utilities: Util } = require('./js/utilities/Utilities.js');
 
 console.log("你好世界");
-
 
 const routes = {
 	'/': Homepage,
@@ -12,19 +14,27 @@ const routes = {
 	'/about': About,
 };
 
+
 const runApp = async _ => {
 
 	// find the app div to add page content to
 	const app = null || document.getElementById('app');
 	if(app) {
+		let nav = app.children.nav;
+		let footer = app.children.footer;
+		let content = app.children.content;
 
+		nav.innerHTML = await Navbar.render();
+		footer.innerHTML = await Footer.render();
+		
 		query = Util.getUrlQuery();
+		console.log('query:', query);
 
 		// fix for first load, might need to change later
-		if(!routes[query]) {
-			query = '/';
+		if(!routes[query.route]) {
+			query.route = '/';
 		}
-		app.innerHTML = await routes[query].render();
+		content.innerHTML = await routes[query.route].render();
 
 
 	} else {

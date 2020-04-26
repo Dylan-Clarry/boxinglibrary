@@ -1,10 +1,13 @@
 let Homepage = {
 	render: async _ => {
-		return `
+
+		let content = `
 			<div>
-				<h1><a class="spalink" href="#/">Home</a> <a class="spalink" href="#/about">About</a></h1>
+				<h1><a href="#/">Home</a> <a href="#/about">About</a></h1>
 			</div>
 		`;
+
+		return content;
 	}
 }
 
