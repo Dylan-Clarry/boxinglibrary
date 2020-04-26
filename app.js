@@ -5,7 +5,7 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const path = require('path');
-const mysql = require('mysql')
+
 // variables
 const app = express();
 
@@ -14,19 +14,6 @@ const app = express();
 // ====================
 
 
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'password',
-  database: 'mydb'
-})
-
-
-
-connection.connect(function(err) {
-    if (err) throw err;
-});
-module.exports = connection;
 
 // use normal promise
 
@@ -58,13 +45,15 @@ app.use((req, res, next) => {
 // ====================
 const matchesRoute = require('./api/routes/matches');
 const usersRoute = require('./api/routes/users');
-
+const teamsRoute = require('./api/routes/teams');
 
 // Routes which handle requests
-app.use('/matches', matchesRoute);
-app.use('/users', usersRoute);
+app.use(usersRoute);
+app.use(matchesRoute);
+app.use(teamsRoute);
 
 // error handling
+
 app.use((req, res, next) => {
 	const error = new Error("404 not found.");
 	error.status = 404;
@@ -84,4 +73,5 @@ app.use((error, req, res, next) => {
 // exports
 // ====================
 module.exports = app;
+
 
