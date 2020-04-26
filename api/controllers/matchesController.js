@@ -1,67 +1,74 @@
 // ====================
 // imports
 // ====================
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 // ====================
 // models
 // ====================
-const Matches = require('../models/matches');
+//const User = require('../models/user');
+
+// ====================
+// controllers
+// ====================
 
 // ====================
 // exports
 // ====================
 
-// load matches and serve onto index page
-//for now queries will be placed into the export code blacks for now and will be updated as proper code later
-exports.getAllMatches = (req, res, next) => {
+// returns a list of users
+exports.getUsersList = (req, res, next) => {
+
+	let sql = "select * FROM userList"
+	
+	connection.query(sql,(err,result)=>{
+		if(err) throw err;
+		console.log(result);
+		res.send('users retrieved')
+	});
+	
+
 	/*
-	SELECT * FROM matches
-	WHERE matches.userID = req.userID
+	select * FROM userList
 	*/
+
 };
 
-// get one match entry
-exports.getOneMatch = (req, res, next) => {
+// signup user
+exports.signup = (req, res, next) => {
+	
+	
 	/*
-	SELECT * FROM matches
-	WHERE matches.userID = req.userID AND where matches.matchID = req.matchID
+	
+	insert into userList(username,password,email)
+	values(req.username,req.password,req.email)
 	
 	*/
 };
 
-// create match
-exports.createMatch = (req, res, next) => {
-
-	/*
-
-Insert into matches(userID,Title, teamID1,teamID2,score1,score2,description,winner)
-values(req.userID,req.title,req.teamID1,req.teamID2,req.score1,req.score2,req.description)
-
-*/
+// login user
+exports.login = (req, res, next) => {
 	
-};
-
-// update Match
-exports.updateMatch = (req, res, next) => {
-	/*
-
-Insert into matches(userID,Title, teamID1,teamID2,score1,score2,description,winner)
-values(req.userID,req.title,req.teamID1,req.teamID2,req.score1,req.score2,req.description)
-
-*/
-
-};
-
-// delete Match
-exports.deleteMatch = (req, res, next) => {
 /*
-DELETE FROM matches WHERE matches.matchID = req.matchID
-*/
+	
+	insert into userList(username,password,email)
+	values(req.username,req.password,req.email)
+	
+	*/
+
+
 };
 
-
-
-
-
-
-
+// delete user
+exports.delete = (req, res, next) => {
+	
+	/*
+	
+	delete from userlist
+	where userlsit.username = req.username
+	
+	*/
+	
+	
+};
