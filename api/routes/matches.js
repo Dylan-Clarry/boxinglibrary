@@ -20,7 +20,7 @@ const matchesController = require('../controllers/matchesController');
 //////////
 
 // get all matches
-router.get('/matches', (req,res,next)=>{
+router.get('/matches',checkAuth,  (req,res,next)=>{
     let sql = "SELECT matchID, userID,description,score1,score2,teamID1,teamID2,t.name as teamID1_Name,t1.name as teamID2_Name FROM matches m JOIN teams t ON t.teamID  = m.teamID1 JOIN teams t1 ON t1.teamID = m.teamID2"
 	
 	console.log(conn);
@@ -33,7 +33,7 @@ router.get('/matches', (req,res,next)=>{
 });
 
 // get all matches belonging to a user
-router.get('/matches/:userID', (req,res,next)=>{
+router.get('/matches/:userID',checkAuth,  (req,res,next)=>{
     let sql = "SELECT matchID, userID,description,score1,score2,teamID1,teamID2,t.name as teamID1_Name,t1.name as teamID2_Name FROM matches m JOIN teams t ON t.teamID  = m.teamID1 JOIN teams t1 ON t1.teamID = m.teamID2 WHERE userID = ?"
 	console.log(conn);
 	conn.query(sql,req.params.userID,(err,result)=>{
@@ -45,7 +45,7 @@ router.get('/matches/:userID', (req,res,next)=>{
 });
 
 //  get one Match while the current user is logged in
-router.get('/matches/:userID/:matchID',  (req,res,next)=>{
+router.get('/matches/:userID/:matchID',checkAuth,   (req,res,next)=>{
 	let sql = "SELECT matchID, userID,description,score1,score2,teamID1,teamID2,t.name as teamID1_Name,t1.name as teamID2_Name FROM matches m JOIN teams t ON t.teamID  = m.teamID1 JOIN teams t1 ON t1.teamID = m.teamID2 WHERE userID = ? and matchID = ?"
 	//console.log(conn);
 	conn.query(sql,[req.params.userID,req.params.matchID],(err,result)=>{
@@ -55,7 +55,7 @@ router.get('/matches/:userID/:matchID',  (req,res,next)=>{
 	});
 });
 //selects all matches that are apart of a teamID and belong to the user
-router.get('/matches/:userID/teams/:teamID', (req,res,next)=>{
+router.get('/matches/:userID/teams/:teamID',checkAuth,  (req,res,next)=>{
     let sql = "SELECT * FROM matches WHERE userID = ? and (teamID1 = ? or teamID2 = ?)"
 	console.log(conn);
 	conn.query(sql,[req.params.userID,req.params.teamID,req.params.teamID],(err,result)=>{
@@ -72,7 +72,7 @@ router.get('/matches/:userID/teams/:teamID', (req,res,next)=>{
 //////////
 
 // create new match
-router.post('/matches/:userID/create',  (req,res,next)=>{
+router.post('/matches/:userID/create', checkAuth,  (req,res,next)=>{
 	let sql = "INSERT INTO matches (userID,description,score1,score2,teamID1,teamID2) VALUES ?"
 	const values = [[req.params.userID,req.body.description,req.body.score1,req.body.score2,req.body.teamID1,req.body.teamID2,]]
 	conn.query(sql,[values],(err,result)=>{
@@ -87,7 +87,7 @@ router.post('/matches/:userID/create',  (req,res,next)=>{
 // update existing match at
 //requires a matchID to choose which match to edit
 //able to only edit one match at a time
-router.post('/matches/:userID/update/:matchID', (req,res,next)=>{
+router.post('/matches/:userID/update/:matchID',checkAuth,  (req,res,next)=>{
 	let sql = "UPDATE matches SET ?? = ? WHERE  userID = ? and matchID = ?";
 	conn.query(sql,[req.body.columnToChange,req.body.replacement,req.params.userID,req.params.matchID],(err,result)=>{
 		if(err) throw err;
@@ -101,7 +101,7 @@ router.post('/matches/:userID/update/:matchID', (req,res,next)=>{
 
 // delete 
 //by matchID
-router.post('/matches/:userID/delete/:matchID', (req,res,next)=>{
+router.post('/matches/:userID/delete/:matchID',checkAuth, (req,res,next)=>{
 	let sql = "DELETE FROM matches WHERE  userID = ? and matchID = ?";
 	conn.query(sql,[req.params.userID,req.params.matchID],(err,result)=>{
 		if(err) throw err;
