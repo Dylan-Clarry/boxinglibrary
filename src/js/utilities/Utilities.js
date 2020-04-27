@@ -6,6 +6,10 @@ const Utilities = {
 			id 		: url[2] ? url[2] : null,
 		}
 		return query;
+	},
+
+	parseQuery: query => {
+		return (query.route ? '' + query.route : '/') + (query.id ? '/:id' : '');
 	}
 }
 

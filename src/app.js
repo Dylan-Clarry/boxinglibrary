@@ -1,5 +1,6 @@
 const { Homepage } = require('./js/pages/Homepage.js');
 const { About } = require('./js/pages/About.js');
+const { Post } = require('./js/pages/Post.js');
 
 const { Navbar } = require('./js/components/Navbar.js');
 const { Footer } = require('./js/components/Footer.js');
@@ -12,6 +13,7 @@ const routes = {
 	'/': Homepage,
 	'/index.html': Homepage,
 	'/about': About,
+	'/posts/:id': Post,
 };
 
 
@@ -30,11 +32,15 @@ const runApp = async _ => {
 		query = Util.getUrlQuery();
 		console.log('query:', query);
 
+		let parsedQuery = Util.parseQuery(query);
+		console.log(parsedQuery)
+
 		// fix for first load, might need to change later
-		if(!routes[query.route]) {
+		if(!routes[parsedQuery]) {
 			query.route = '/';
 		}
-		content.innerHTML = await routes[query.route].render();
+		
+		content.innerHTML = await routes[parsedQuery].render();
 
 
 	} else {
