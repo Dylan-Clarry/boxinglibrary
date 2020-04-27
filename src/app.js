@@ -16,9 +16,8 @@ const routes = {
 	'/index.html': Homepage,
 	'/account': Account,
 	'/dashboard': Dashboard,
-	'/posts/:id': Post,
+	'/match/:id': Match,
 };
-
 
 const runApp = async _ => {
 
