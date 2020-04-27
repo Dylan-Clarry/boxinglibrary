@@ -1,6 +1,8 @@
 const { Homepage } = require('./js/pages/Homepage.js');
-const { About } = require('./js/pages/About.js');
 const { Post } = require('./js/pages/Post.js');
+const { Account } = require('./js/pages/Account.js');
+const { Dashboard } = require('./js/pages/Dashboard.js');
+const { Match } = require('./js/pages/Match.js');
 
 const { Navbar } = require('./js/components/Navbar.js');
 const { Footer } = require('./js/components/Footer.js');
@@ -12,7 +14,8 @@ console.log("你好世界");
 const routes = {
 	'/': Homepage,
 	'/index.html': Homepage,
-	'/about': About,
+	'/account': Account,
+	'/dashboard': Dashboard,
 	'/posts/:id': Post,
 };
 
@@ -39,7 +42,7 @@ const runApp = async _ => {
 		if(!routes[parsedQuery]) {
 			query.route = '/';
 		}
-		
+
 		content.innerHTML = await routes[parsedQuery].render();
 
 

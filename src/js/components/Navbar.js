@@ -9,8 +9,8 @@ const Navbar = {
 					<div id="navbar-items">
 						<nav>
 							<ul class="nav-list">
-								<li><a href="#/">Dashboard</a></li>
-								<li><a href="#/">Account</a></li>
+								<li><a href="#/dashboard">Dashboard</a></li>
+								<li><a href="#/account">Account</a></li>
 							</ul>
 						</nav>
 					</div><!-- /navbar-desktop -->
