@@ -45,7 +45,6 @@ const runApp = async _ => {
 		content.innerHTML = await currPage.render();
 		currPage.postRender();
 
-
 	} else {
 		console.error("SPA Error: root element div with id 'app' not found");
 	}
