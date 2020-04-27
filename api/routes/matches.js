@@ -20,7 +20,7 @@ const matchesController = require('../controllers/matchesController');
 //////////
 
 // get all matches
-router.get('/matches',checkAuth,  (req,res,next)=>{
+router.get('/matches', (req,res,next)=>{
     let sql = "SELECT matchID, userID,description,score1,score2,teamID1,teamID2,t.name as teamID1_Name,t1.name as teamID2_Name FROM matches m JOIN teams t ON t.teamID  = m.teamID1 JOIN teams t1 ON t1.teamID = m.teamID2"
 	
 	console.log(conn);
@@ -33,7 +33,7 @@ router.get('/matches',checkAuth,  (req,res,next)=>{
 });
 
 // get all matches belonging to a user
-router.get('/matches/:userID',checkAuth,  (req,res,next)=>{
+router.get('/matches/:userID', (req,res,next)=>{
     let sql = "SELECT matchID, userID,description,score1,score2,teamID1,teamID2,t.name as teamID1_Name,t1.name as teamID2_Name FROM matches m JOIN teams t ON t.teamID  = m.teamID1 JOIN teams t1 ON t1.teamID = m.teamID2 WHERE userID = ?"
 	console.log(conn);
 	conn.query(sql,req.params.userID,(err,result)=>{
@@ -45,7 +45,7 @@ router.get('/matches/:userID',checkAuth,  (req,res,next)=>{
 });
 
 //  get one Match while the current user is logged in
-router.get('/matches/:userID/:matchID',checkAuth,   (req,res,next)=>{
+router.get('/matches/:userID/:matchID',  (req,res,next)=>{
 	let sql = "SELECT matchID, userID,description,score1,score2,teamID1,teamID2,t.name as teamID1_Name,t1.name as teamID2_Name FROM matches m JOIN teams t ON t.teamID  = m.teamID1 JOIN teams t1 ON t1.teamID = m.teamID2 WHERE userID = ? and matchID = ?"
 	//console.log(conn);
 	conn.query(sql,[req.params.userID,req.params.matchID],(err,result)=>{
@@ -55,7 +55,7 @@ router.get('/matches/:userID/:matchID',checkAuth,   (req,res,next)=>{
 	});
 });
 //selects all matches that are apart of a teamID and belong to the user
-router.get('/matches/:userID/teams/:teamID',checkAuth,  (req,res,next)=>{
+router.get('/matches/:userID/teams/:teamID',  (req,res,next)=>{
     let sql = "SELECT * FROM matches WHERE userID = ? and (teamID1 = ? or teamID2 = ?)"
 	console.log(conn);
 	conn.query(sql,[req.params.userID,req.params.teamID,req.params.teamID],(err,result)=>{
