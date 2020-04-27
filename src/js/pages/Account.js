@@ -45,6 +45,7 @@ let Account = {
 	},
 
 	postRender: async _ => {
+
 		loginForm = document.getElementById('login-form');
 		signupForm = document.getElementById('signup-form');
 		changeFormType = document.getElementById('change-form-type');

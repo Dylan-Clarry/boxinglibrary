@@ -46,6 +46,21 @@ const getMatches = _ => {
 	return matches;
 }
 
+const getMatchesAjax = _ => {
+	
+	let response = '';
+
+	return $.ajax({
+		type: 'GET',
+		datatype: 'jsonp',
+		url: 'https://footlib-backend.herokuapp.com/matches',
+		async: false,
+		success: data => {
+			console.log(data);
+		}
+	});
+}
+
 const getRecentMatches = _ => {
 	recentMatches = [
 		{
@@ -87,8 +102,8 @@ let buildMatchCard = (match, index) => {
 		<div class="match-card-graphic">
 			
 		</div><!-- /match-card-graphic -->
-		<h2 class="match-card-title"><a href="#/match/${ match.id }">${ match.title }</a></h2>
-		<h2 class="match-card-score">${ match.score[0] } - ${ match.score[1] }</h2>
+		<h2 class="match-card-title"><a href="#/match/${ match.matchID }">${ match.teamID1_Name + '\nvs.\n' + match.teamID2_Name }</a></h2>
+		<h2 class="match-card-score">${ match.score1 } - ${ match.score2 }</h2>
 		<p>${ match.description }</p>
 	</div><!-- /match -->
 	`
@@ -96,6 +111,12 @@ let buildMatchCard = (match, index) => {
 
 let Homepage = {
 	render: async _ => {
+
+		let matches;
+
+		getMatchesAjax().done(result => {
+			matches = result;
+		});
 
 		let content = `
 			<div id="index" class="container">
@@ -109,7 +130,6 @@ let Homepage = {
 		`;
 
 		// build matches set
-		let matches = getMatches();
 		let matchCardSet = buildMatchCardSet(matches);
 
 		content += matchCardSet + `
