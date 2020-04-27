@@ -32,7 +32,7 @@ router.get('/matches', (req,res,next)=>{
 
 });
 //get match by matchID
-router.get('/matches/:matchID', (req,res,next)=>{
+router.get('/matches/match/:matchID', (req,res,next)=>{
     let sql = "SELECT matchID, userID,description,score1,score2,teamID1,teamID2,t.name as teamID1_Name,t1.name as teamID2_Name FROM matches m JOIN teams t ON t.teamID  = m.teamID1 JOIN teams t1 ON t1.teamID = m.teamID2 where matchID = ?"
 	
 	console.log(conn);
