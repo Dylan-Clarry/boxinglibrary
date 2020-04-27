@@ -38,7 +38,7 @@ var stok = require('../../nodemon.json')
 
 
 // get list of users
-router.get('/users', (req,res,next)=>{
+router.get('/users',checkAuth, (req,res,next)=>{
     let sql = "select * FROM users"
 	console.log(conn);
 	conn.query(sql,(err,result)=>{
@@ -161,7 +161,7 @@ router.post('/signup',  (req,res,next)=>{
 });
 
 // delete
-router.delete('/delete',  (req,res,next)=>{
+router.delete('/delete',checkAuth, (req,res,next)=>{
     console.log(req.body.userID);
 
 
