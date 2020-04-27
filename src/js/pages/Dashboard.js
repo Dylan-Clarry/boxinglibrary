@@ -1,8 +1,45 @@
 // ====================
-// dashboard.js
+// Dashboard
 // ====================
-dashboard = document.getElementById('dashboard');
-addMatchBtn = '';
+
+const getMatches = _ => {
+	matches = [
+		{	
+			id: 1,
+			title: "France vs Spain",
+			teams: ["France", "Spain"],
+			score: [10, 2],
+			winner: "France",
+			description: "France faces Spain."
+		},
+		{
+			id: 2,
+			title: "Italy vs Brazil",
+			teams: ["Italy", "Brazil"],
+			score: [8, 3],
+			winner: "Brazil",
+			description: "Italy faces Brazil"
+		},
+		{
+			id: 3,
+			title: "Denmark vs  Russia",
+			teams: ["Denmark", "Russia"],
+			score: [3, 5],
+			winner: "Denmark",
+			description: "Denmark faces Russia"
+		},
+		{
+			id: 4,
+			title: "Poland vs Belgium",
+			teams: ["Poland", "Belgium"],
+			score: [101, 20],
+			winner: "Belgium",
+			description: "Poland faces Belgium"
+		},
+	];
+
+	return matches;
+}
 
 let buildAddMatch = _ => {
 	return `
@@ -27,10 +64,6 @@ let buildAddMatch = _ => {
 		</div><!-- /add-match-form -->
 	`
 }
-
-// let buildEditMatch = _ => {
-	
-// }
 
 let buildMatchRow = (match, index) => {
 	return `
@@ -70,17 +103,32 @@ let buildDashboard = matches => {
 	return content;
 }
 
-if(dashboard !== null) {
-	dashboard.innerHTML = buildDashboard(matches);
-	addMatchBtn = document.getElementById('add-match-btn');
+let Dashboard = {
+	render: async _ => {
 
-	// add add match button event listener
-	addMatchBtn.addEventListener('click', _ => {
-		dashboard.innerHTML = buildAddMatch();
-		backDashboardBtn = document.getElementById('back-dashboard-btn');
-		backDashboardBtn.addEventListener('click', _ => {
-			dashboard.innerHTML = buildDashboard(matches);
-			addMatchBtn = document.getElementById('add-match-btn');
-		});
-	});
+		matches = getMatches();
+		console.log(matches);
+
+		let content = `
+			<div id="index" class="container">
+				<h2><a href="#/">Back</a></h2>
+
+				<div id="dashboard">
+		`;
+		
+		let dashboard = buildDashboard(matches);
+		content += dashboard + `
+				</div><!-- /dashboard -->
+			</div><!-- /container -->
+		`;
+
+		return content;
+	},
+
+	postRender: async _ => {
+		let dash = document.getElementById('dashboard');
+		console.log("hello post", dash);
+	}
 }
+
+module.exports = { Dashboard };
