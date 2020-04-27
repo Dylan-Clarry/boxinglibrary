@@ -1,5 +1,4 @@
 const { Homepage } = require('./js/pages/Homepage.js');
-const { Post } = require('./js/pages/Post.js');
 const { Account } = require('./js/pages/Account.js');
 const { Dashboard } = require('./js/pages/Dashboard.js');
 const { Match } = require('./js/pages/Match.js');
@@ -42,7 +41,9 @@ const runApp = async _ => {
 			query.route = '/';
 		}
 
-		content.innerHTML = await routes[parsedQuery].render();
+		let currPage = routes[parsedQuery];
+		content.innerHTML = await currPage.render();
+		currPage.postRender();
 
 
 	} else {

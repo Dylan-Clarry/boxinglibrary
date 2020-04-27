@@ -66,7 +66,6 @@ let Match = {
 
 		let id = getUrlQuery().id;
 		match = getMatchById(id);
-		console.log('match:', match);
 
 		let content = `
 			<div id="index" class="container">
@@ -99,7 +98,9 @@ let Match = {
 		`;
 
 		return content;
-	}
+	},
+
+	postRender: async _ => {}
 }
 
 module.exports = { Match };

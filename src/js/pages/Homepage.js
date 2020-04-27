@@ -131,7 +131,9 @@ let Homepage = {
 		`;
 
 		return content;
-	}
+	},
+
+	postRender: async _ => {}
 }
 
 module.exports = { Homepage };

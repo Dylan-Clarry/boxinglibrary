@@ -9,7 +9,9 @@ let Account = {
 		`;
 
 		return content;
-	}
+	},
+
+	postRender: async _ => {}
 }
 
 module.exports = { Account };
