@@ -34,24 +34,34 @@ const bodyParser = require("body-parser");
 
 // get list of teams
 router.get('/teams', (req,res,next)=>{
-    let sql = "select * FROM teams"
-	console.log(conn);
-	conn.query(sql,(err,result)=>{
-		if(err) throw err;
-		console.log(result);
-		res.send(result);
+	conn.getConnection(function(err, connection) {
+		if (err) throw err; // not connected!
+		let sql = "select * FROM teams"
+		console.log(conn);
+		conn.query(sql,(err,result)=>{
+			if(err) throw err;
+			console.log(result);
+			res.send(result);
+			
+		});
+		connection.release();
 	});
 });
 
 //get single team by teamID
 //can be used for getting the team Name given the teamID
 router.get('/teams/:teamID', (req,res,next)=>{
-    let sql = "select * FROM teams WHERE teamID = ?"
-	console.log(conn);
-	conn.query(sql,[req.params.teamID],(err,result)=>{
-		if(err) throw err;
-		console.log(result);
-		res.send(result);
+	conn.getConnection(function(err, connection) {
+		if (err) throw err; // not connected!
+		let sql = "select * FROM teams WHERE teamID = ?"
+		console.log(conn);
+		conn.query(sql,[req.params.teamID],(err,result)=>{
+			if(err) throw err;
+			console.log(result);
+			res.send(result);
+			
+		});
+		connection.release();
 	});
 });
 //////////
