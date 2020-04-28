@@ -2,40 +2,33 @@
 // Homepage
 // ====================
 
-const getRecentMatches = _ => {
-	recentMatches = [
-		{
-			id: 1,
-			title: "Croatia vs Mexico",
-			teams: ["Croatia", "Mexico"],
-			score: [10, 2],
-			winner: "Croatia",
-			description: "Croatia faces Mexico"
+const thirdPartyCall = _ => {
+	let url = 'https://api-football-v1.p.rapidapi.com/v2/leagueTable/524';
+	return $.ajax({
+		headers: {
+			"x-rapidapi-host": "api-football-v1.p.rapidapi.com",
+			"x-rapidapi-key": "94b2a171bcmshc5866e97b177557p15ea11jsn42e8c6f871c1"
 		},
-		{
-			id: 2,
-			title: "Germany vs England",
-			teams: ["Germany", "England"],
-			score: [8, 3],
-			winner: "England",
-			description: "Germany faces England"
-		},
-	]
-
-	return recentMatches;
+		type: 'GET',
+		datatype: 'jsonp',
+		crossdomain: true,
+		url: url,
+		async: false,
+		success: data => {
+			//console.log(data);
+		}
+	});
 }
 
 const getMatchesAjax = _ => {
-
 	let url = 'https://footlib-backend.herokuapp.com/matches';
-
 	return $.ajax({
 		type: 'GET',
 		datatype: 'jsonp',
 		url: url,
 		async: false,
 		success: data => {
-			console.log(data);
+			//console.log(data);
 		}
 	});
 }
@@ -65,51 +58,74 @@ let buildMatchCard = (match, index) => {
 	`
 }
 
+let buildStandingsCardsSet = standings => {
+	content = ''
+	for(i = 0; i < 6; i++) {
+
+		console.log('standdnsgkldng:', standings[i]);
+
+		// build match cards into content
+		content += buildStandingsCard(standings[i], i);
+	}
+	return content
+}
+
+const buildStandingsCard = (standing, index) => {
+	return `
+	<div id="match-card-${ index }" class="standing-card match-card">
+		<div class="match-card-graphic">
+			
+		</div><!-- /match-card-graphic -->
+		<img src="${ standing.logo }" alt="${ standing.logo }" />
+		<h3 class="match-card-team">${ standing.teamName }</h3>
+		<h3 class="match-card-league">${ standing.group }</h3>
+		<h3 class="match-card-rank">Rank ${ standing.rank }</h3>
+	</div><!-- /match -->
+	`
+}
+
 let Homepage = {
 	render: async _ => {
-
 		let matches;
-
 		getMatchesAjax().done(result => {
 			matches = result;
+		});
+
+		let standings = [];
+		thirdPartyCall().done(result => {
+			console.log(result);
+			standings = result.api.standings[0];
 		});
 
 		let content = `
 			<div id="index" class="container">
 
-				<h1>Live Feed</h1>
+				<h1>Team Standings</h1>
+		`;
+
+		if(standings.length > 0) {
+			content += `
+				<div id="standings" class="matches grid">
+			` + buildStandingsCardsSet(standings) + `
+				</div><!-- standings -->
+			`;
+		}
+		content += `
 				<br>
 
-				<h1>Recent Matches</h1>
+				<h1>Matches</h1>
 				
 				<div id="recent-matches" class="matches grid">
 		`;
 
 		// build matches set
 		let matchCardSet = buildMatchCardSet(matches);
-
 		content += matchCardSet + `
 			</div><!-- recent-matches -->
 		`;
-
-		// build recent matches set
-		content += `
-			<h1>Search Matches</h1>
-				<div id="homepage-matches" class="matches grid">
-		`;
-
-		let recentMatches = getRecentMatches();
-		let recentMatchCardSet = buildMatchCardSet(recentMatches);
-
-		content += recentMatchCardSet + `
-				</div><!-- /matches -->
-			</div><!-- /container -->
-		`;
-
 		return content;
 	},
-
-	postRender: async _ => {}
+	postRender: async _ => { }
 }
 
 module.exports = { Homepage };

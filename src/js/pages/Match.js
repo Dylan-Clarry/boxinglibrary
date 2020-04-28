@@ -18,9 +18,7 @@ const getMatchesAjax = _ => {
 }
 
 const getMatchById = id => {
-
 	let url = 'https://footlib-backend.herokuapp.com/matches/match/' + id;
-
 	return $.ajax({
 		type: 'GET',
 		datatype: 'jsonp',
@@ -33,13 +31,13 @@ const getMatchById = id => {
 }
 
 const getUrlQuery = _ => {
-		let url = location.hash.slice(1).split('/');
-		let query = {
-			route 	: url[1] ? '/' + url[1] : null,
-			id 		: url[2] ? url[2] : null,
-		}
-		return query;
+	let url = location.hash.slice(1).split('/');
+	let query = {
+		route 	: url[1] ? '/' + url[1] : null,
+		id 		: url[2] ? url[2] : null,
 	}
+	return query;
+}
 
 const matchWinner = match => {
 	return match.score1 > match.score2 ? match.teamID1_Name : match.teamID2_Name;
@@ -47,13 +45,11 @@ const matchWinner = match => {
 
 let Match = {
 	render: async _ => {
-
 		let id = getUrlQuery().id;
 		let match;
 		getMatchById(id).done(result => {
 			match = result[0];
 		});
-
 		let content = `
 			<div id="index" class="container">
 
@@ -76,13 +72,20 @@ let Match = {
 						<h1 class="match-title">${ match.teamID1_Name + '\nvs.\n' + match.teamID2_Name }</h1>
 						<p>${ match.description }</p>
 					</article>
+		`;
+		if(match.matchURL != null && match.matchURL != '') {
+			console.log('matchURL:', match.matchURL);
+			content += `
+				<iframe src="${ match.matchURL }" height="400" width="600" frameborder="0"></iframe>
+			`;
+		}
+		content += `
+
 				</div><!-- /single-match -->
 			</div><!-- /container -->
 		`;
-
 		return content;
 	},
-
 	postRender: async _ => {}
 }
 

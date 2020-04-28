@@ -8,7 +8,6 @@ const _removeToken = _ => {
 };
 
 const _getToken = _ => {
-
     let oneHour = 60 * 60 * 1000;
 
     // get object, return null if null
@@ -21,7 +20,6 @@ const _getToken = _ => {
     var timeNow = new Date().getTime();
     //console.log(timeNow - tokenTime);
     if(timeNow - tokenTime > oneHour) {
-        console.log("from here (get token)");
         _removeToken();
         return null;
     }
@@ -32,11 +30,7 @@ const _getToken = _ => {
 
 const Navbar = {
 	render: async _ => {
-
 		let token = _getToken();
-
-		console.log("token:", token);
-
 		let content = `
 			<div class="nav">
 				<div class="container">
@@ -46,22 +40,22 @@ const Navbar = {
 						<nav>
 							<ul class="nav-list">
 		`;
-
 		if(token) {
 			content += `
 								<li><a href="#/dashboard">Dashboard</a></li>
 			`;
-		}
-
-		content += `
+		} else {
+			content += `
 								<li><a href="#/account">Signup/Login</a></li>
+			`;
+		}
+		content += `
 							</ul>
 						</nav>
 					</div><!-- /navbar-desktop -->
 				</div><!-- /container -->
 			</div><!-- /nav -->
 		`;
-
 		return content;
 	}
 }

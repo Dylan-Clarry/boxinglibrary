@@ -2,43 +2,66 @@
 // Dashboard
 // ====================
 
-const getMatches = _ => {
-	matches = [
-		{	
-			id: 1,
-			title: "France vs Spain",
-			teams: ["France", "Spain"],
-			score: [10, 2],
-			winner: "France",
-			description: "France faces Spain."
-		},
-		{
-			id: 2,
-			title: "Italy vs Brazil",
-			teams: ["Italy", "Brazil"],
-			score: [8, 3],
-			winner: "Brazil",
-			description: "Italy faces Brazil"
-		},
-		{
-			id: 3,
-			title: "Denmark vs  Russia",
-			teams: ["Denmark", "Russia"],
-			score: [3, 5],
-			winner: "Denmark",
-			description: "Denmark faces Russia"
-		},
-		{
-			id: 4,
-			title: "Poland vs Belgium",
-			teams: ["Poland", "Belgium"],
-			score: [101, 20],
-			winner: "Belgium",
-			description: "Poland faces Belgium"
-		},
-	];
+const _getUser = _ => {
+    // get object, return null if null
+    var tokenObj = JSON.parse(window.localStorage.getItem('tokenObj'));
+    if(!tokenObj) return null;
+    return tokenObj.user;
+};
 
-	return matches;
+const _getToken = _ => {
+    let oneHour = 60 * 60 * 1000;
+
+    // get object, return null if null
+    var tokenObj = JSON.parse(window.localStorage.getItem('tokenObj'));
+    //console.log('token obj', tokenObj);
+    if(!tokenObj) return null;
+    
+    // if token time is stored for more than an hour remove token and return null
+    var tokenTime = tokenObj.timestamp;
+    var timeNow = new Date().getTime();
+    //console.log(timeNow - tokenTime);
+    if(timeNow - tokenTime > oneHour) {
+        console.log("from here (get token)");
+        _removeToken();
+        return null;
+    }
+
+    // return token
+    return tokenObj.token;
+};
+
+const getUserMatchesAjax = user => {
+	let url = 'https://footlib-backend.herokuapp.com/matches/' + user;
+	return $.ajax({
+		type: 'GET',
+		datatype: 'jsonp',
+		url: url,
+		async: false,
+		success: data => {
+			//console.log(data);
+		}
+	});
+}
+
+const deleteMatch = (user, match, token) => {
+	let url = 'https://footlib-backend.herokuapp.com/matches/' + user + '/delete/' + match;
+	return $.ajax({
+		headers: {
+			"Authorization": token,
+		},
+		type: 'POST',
+		datatype: 'json',
+		url: url,
+		async: true,
+		success: data => {
+			console.log(data);
+		}
+	});
+}
+
+const matchWinner = match => {
+	return match.score1 > match.score2 ? match.teamID1_Name : match.teamID2_Name;
 }
 
 let buildAddMatch = _ => {
@@ -67,14 +90,16 @@ let buildAddMatch = _ => {
 
 let buildMatchRow = (match, index) => {
 	return `
-		<tr id="match-row-${index}" class="match-row">
-			<td class="title">${match.title}</td>
-			<td class="team1">${match.teams[0]}</td>
-			<td class="team2">${match.teams[1]}</td>
+		<tr id="match-row-${ matchWinner(match) }" class="match-row">
+			<td class="title">${ match.teamID1_Name + ' vs. ' + match.teamID2_Name }</td>
+			<td class="team1">${ match.teamID1_Name }</td>
+			<td class="team2">${ match.teamID2_Name }</td>
+			<td class="score1">${ match.score1 }</td>
+			<td class="score2">${ match.score2 }</td>
 			<td class="edit"><button class="edit-btn">Edit</button></td>
-			<td class="delete"><button class="delete-btn">Delete</button></td>
+			<td class="delete"><button id="delete-btn-${ index }" matchid="${ match.matchID }" class="delete-btn">Delete</button></td>
 		</tr>
-	`
+	`;
 }
 
 let buildDashboard = matches => {
@@ -88,6 +113,8 @@ let buildDashboard = matches => {
 				<th>Title</th>
 				<th>Team 1</th>
 				<th>Team 2</th>
+				<th>Score 1</th>
+				<th>Score 2</th>
 				<th>Edit</th>
 				<th>Delete</th>
 			</tr>
@@ -96,7 +123,6 @@ let buildDashboard = matches => {
 	for(i = 0; i < matches.length; i++) {
 		content += buildMatchRow(matches[i], i);
 	}
-
 	content += `
 		</table><!-- /dashboard-table -->
 	`
@@ -105,9 +131,11 @@ let buildDashboard = matches => {
 
 let Dashboard = {
 	render: async _ => {
-
-		matches = getMatches();
-		console.log(matches);
+		let user = _getUser();
+		let matches;
+		getUserMatchesAjax(user).done(result => {
+			matches = result;
+		});
 
 		let content = `
 			<div id="index" class="container">
@@ -115,19 +143,35 @@ let Dashboard = {
 
 				<div id="dashboard">
 		`;
-		
+
 		let dashboard = buildDashboard(matches);
 		content += dashboard + `
 				</div><!-- /dashboard -->
 			</div><!-- /container -->
 		`;
-
 		return content;
 	},
 
 	postRender: async _ => {
 		let dash = document.getElementById('dashboard');
-		console.log("hello post", dash);
+		let addMatchBtn = document.getElementById('add-match-btn');
+		addMatchBtn.addEventListener('click', _ => {
+			document.location.href = document.location.href.split('#')[0] + '#/addmatch';
+		});
+
+		let deleteBtnArr = document.getElementsByClassName('delete-btn');
+		for(i = 0; i < deleteBtnArr.length; i++) {
+			let delKey = deleteBtnArr[i].getAttribute('matchid');
+			deleteBtnArr[i].addEventListener('click', _ => {
+				let user = _getUser();
+				let token = _getToken();
+
+				deleteMatch(user, delKey, token).done(result => {
+					console.log(result);
+					location.reload();
+				});
+			});
+		}
 	}
 }
 
