@@ -51,10 +51,13 @@ const Navbar = {
 			content += `
 								<li><a href="#/dashboard">Dashboard</a></li>
 			`;
+		} else {
+			content += `
+								<li><a href="#/account">Signup/Login</a></li>
+			`;
 		}
 
 		content += `
-								<li><a href="#/account">Signup/Login</a></li>
 							</ul>
 						</nav>
 					</div><!-- /navbar-desktop -->

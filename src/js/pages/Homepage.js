@@ -35,7 +35,7 @@ const getMatchesAjax = _ => {
 		url: url,
 		async: false,
 		success: data => {
-			console.log(data);
+			//console.log(data);
 		}
 	});
 }
