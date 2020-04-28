@@ -2,6 +2,50 @@
 // Account
 // ====================
 
+// token
+const _setToken = token => {
+    _removeToken();
+    //console.log("SET token");
+    var tokenObj = {
+        token: 'bearer ' + token,
+        timestamp: new Date().getTime(),
+    };
+    window.localStorage.setItem('tokenObj', JSON.stringify(tokenObj));
+};
+
+const signUpUser = data => {
+	
+	let url = 'https://footlib-backend.herokuapp.com/signup';
+
+	return $.ajax({
+		type: 'POST',
+		datatype: 'jsonp',
+		data: data,
+		url: url,
+		async: false,
+		success: data => {
+			console.log(data);
+		}
+	});
+}
+
+const loginUser = data => {
+
+	let url = 'https://footlib-backend.herokuapp.com/login';
+
+	return $.ajax({
+		type: 'POST',
+		datatype: 'jsonp',
+		data: data,
+		url: url,
+		async: true,
+		success: data => {
+			console.log(data);
+		}
+	});
+}
+
+
 let Account = {
 	render: async _ => {
 
@@ -14,10 +58,10 @@ let Account = {
 
 					<div id="login-form" class="hide">
 						<h2>Login</h2>
-						<form action="POST" class="account-form">
-							<input type="text" placeholder="Username">
+						<form method="POST" class="account-form">
+							<input name="username" type="text" placeholder="Username">
 							<br>
-							<input type="text" placeholder="Password">
+							<input name="pass" type="text" placeholder="Password">
 							<br>
 							<button type="submit">Login</button>
 						</form><!-- /account-form -->
@@ -25,12 +69,12 @@ let Account = {
 
 					<div id="signup-form">
 						<h2>Signup</h2>
-						<form action="POST" class="account-form">
-							<input type="text" placeholder="Username">
+						<form method="POST" class="account-form">
+							<input name="username" type="text" placeholder="Username">
 							<br>
-							<input type="text" placeholder="Password">
+							<input name="pass" type="text" placeholder="Password">
 							<br>
-							<input type="text" placeholder="Email">
+							<input name="email" type="text" placeholder="Email">
 							<br>
 							<button type="submit">Signup</button>
 						</form><!-- /account-form -->
@@ -45,10 +89,11 @@ let Account = {
 	},
 
 	postRender: async _ => {
+
 		loginForm = document.getElementById('login-form');
 		signupForm = document.getElementById('signup-form');
 		changeFormType = document.getElementById('change-form-type');
-		//may want to add a forgot password and email them theire account info, maybe something to do in the future
+
 		// click event dynamically changes the account form from signup to login
 		if(changeFormType !== null) {
 			changeFormType.addEventListener('click', _ => {
@@ -66,6 +111,50 @@ let Account = {
 					changeFormType.setAttribute("type-value", '0');
 					changeFormType.innerText = "Signing up?"
 				}
+			});
+
+			let signupTrueForm = signupForm.getElementsByTagName('form')[0];
+			console.log(signupTrueForm.elements);
+
+			signupTrueForm.addEventListener('submit', e => {
+
+				// prevent form from reloading page and sending
+				e.preventDefault();
+				
+				// create login object based on formdata
+				var signupObj = {
+					username: signupTrueForm.elements['username'].value,
+					pass: signupTrueForm.elements['pass'].value,
+					email: signupTrueForm.elements['email'].value.toLowerCase(),
+				};
+
+				loginUser(signupObj).done(result => {
+					console.log(result);
+				})
+
+				console.log(signupTrueForm);
+			});
+
+			let loginTrueForm = loginForm.getElementsByTagName('form')[0];
+			console.log(loginTrueForm.elements);
+
+			loginTrueForm.addEventListener('submit', e => {
+
+				// prevent form from reloading page and sending
+				e.preventDefault();
+				
+				// create login object based on formdata
+				var loginObj = {
+					username: loginTrueForm.elements['username'].value,
+					pass: loginTrueForm.elements['pass'].value,
+					//email: loginTrueForm.elements['email'].value.toLowerCase(),
+				};
+
+				loginUser(loginObj).done(result => {
+					console.log(result);
+				})
+
+				console.log(loginTrueForm);
 			});
 		}
 	}
