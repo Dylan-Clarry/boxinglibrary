@@ -13,6 +13,8 @@ const app = express();
 // database connection
 // ====================
 
+
+
 // use normal promise
 
 // morgan logging tool (middleware)
@@ -43,12 +45,15 @@ app.use((req, res, next) => {
 // ====================
 const matchesRoute = require('./api/routes/matches');
 const usersRoute = require('./api/routes/users');
+const teamsRoute = require('./api/routes/teams');
 
 // Routes which handle requests
-app.use('/matches', productsRoute);
-app.use('/users', usersRoute);
+app.use(usersRoute);
+app.use(matchesRoute);
+app.use(teamsRoute);
 
 // error handling
+
 app.use((req, res, next) => {
 	const error = new Error("404 not found.");
 	error.status = 404;
@@ -68,4 +73,5 @@ app.use((error, req, res, next) => {
 // exports
 // ====================
 module.exports = app;
+
 

@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 // ====================
 // models
 // ====================
-const User = require('../models/user');
+//const User = require('../models/user');
 
 // ====================
 // controllers
@@ -19,7 +19,11 @@ const User = require('../models/user');
 
 // returns a list of users
 exports.getUsersList = (req, res, next) => {
+
 	
+	
+	
+
 	/*
 	select * FROM userList
 	*/
@@ -28,6 +32,8 @@ exports.getUsersList = (req, res, next) => {
 
 // signup user
 exports.signup = (req, res, next) => {
+	
+	
 	/*
 	
 	insert into userList(username,password,email)
