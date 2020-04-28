@@ -2,6 +2,7 @@ const { Homepage } = require('./js/pages/Homepage.js');
 const { Account } = require('./js/pages/Account.js');
 const { Dashboard } = require('./js/pages/Dashboard.js');
 const { Match } = require('./js/pages/Match.js');
+const { Addmatch } = require('./js/pages/Addmatch.js');
 
 const { Navbar } = require('./js/components/Navbar.js');
 const { Footer } = require('./js/components/Footer.js');
@@ -16,6 +17,7 @@ const routes = {
 	'/account': Account,
 	'/dashboard': Dashboard,
 	'/match/:id': Match,
+	'/addmatch': Addmatch,
 };
 
 const runApp = async _ => {
@@ -31,10 +33,7 @@ const runApp = async _ => {
 		footer.innerHTML = await Footer.render();
 		
 		query = Util.getUrlQuery();
-		console.log('query:', query);
-
 		let parsedQuery = Util.parseQuery(query);
-		console.log(parsedQuery)
 
 		// fix for first load, might need to change later
 		if(!routes[parsedQuery]) {

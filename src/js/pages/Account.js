@@ -7,12 +7,13 @@ const _removeToken = _ => {
     window.localStorage.removeItem('tokenObj');
 };
 
-const _setToken = token => {
+const _setToken = (token, user) => {
     _removeToken();
     //console.log("SET token");
     var tokenObj = {
         token: 'bearer ' + token,
         timestamp: new Date().getTime(),
+        user: user,
     };
     window.localStorage.setItem('tokenObj', JSON.stringify(tokenObj));
 };
@@ -69,7 +70,7 @@ let Account = {
 						<form method="POST" class="account-form">
 							<input name="username" type="text" placeholder="Username">
 							<br>
-							<input name="pass" type="text" placeholder="Password">
+							<input name="pass" type="password" placeholder="Password">
 							<br>
 							<button type="submit">Login</button>
 						</form><!-- /account-form -->
@@ -159,7 +160,7 @@ let Account = {
 						loginUser(loginObj).done(result => {
 							console.log(result.accessToken);
 
-							_setToken(result.accessToken);
+							_setToken(result.accessToken, usernameVal);
 
 							document.location.href = '/';
 						});
@@ -195,7 +196,7 @@ let Account = {
 					if(result.loggedin == true) {
 						console.log(result.accessToken);
 
-						_setToken(result.accessToken);
+						_setToken(result.accessToken, result.userID);
 						
 						document.location.href = '/';
 					} else {
