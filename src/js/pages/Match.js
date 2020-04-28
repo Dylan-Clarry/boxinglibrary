@@ -2,54 +2,34 @@
 // Match
 // ====================
 
-const getMatches = _ => {
-	matches = [
-		{	
-			id: 1,
-			title: "France vs Spain",
-			teams: ["France", "Spain"],
-			score: [10, 2],
-			winner: "France",
-			description: "France faces Spain."
-		},
-		{
-			id: 2,
-			title: "Italy vs Brazil",
-			teams: ["Italy", "Brazil"],
-			score: [8, 3],
-			winner: "Brazil",
-			description: "Italy faces Brazil"
-		},
-		{
-			id: 3,
-			title: "Denmark vs  Russia",
-			teams: ["Denmark", "Russia"],
-			score: [3, 5],
-			winner: "Denmark",
-			description: "Denmark faces Russia"
-		},
-		{
-			id: 4,
-			title: "Poland vs Belgium",
-			teams: ["Poland", "Belgium"],
-			score: [101, 20],
-			winner: "Belgium",
-			description: "Poland faces Belgium"
-		},
-	];
-
-	return matches;
+// ********************
+// JQuery AJAX Calls
+// ********************
+const getMatchesAjax = _ => {
+	return $.ajax({
+		type: 'GET',
+		datatype: 'jsonp',
+		url: 'https://footlib-backend.herokuapp.com/matches/match/',
+		async: false,
+		success: data => {
+			console.log(data);
+		}
+	});
 }
 
 const getMatchById = id => {
-	matches = getMatches();
-	console.log(matches);
 
-	for(i = 0; i < matches.length; i++) {
-		if(id == matches[i].id) {
-			return matches[i];
+	let url = 'https://footlib-backend.herokuapp.com/matches/match/' + id;
+
+	return $.ajax({
+		type: 'GET',
+		datatype: 'jsonp',
+		url: url,
+		async: false,
+		success: data => {
+			console.log('response data:', data);
 		}
-	}
+	});
 }
 
 const getUrlQuery = _ => {
@@ -61,11 +41,18 @@ const getUrlQuery = _ => {
 		return query;
 	}
 
+const matchWinner = match => {
+	return match.score1 > match.score2 ? match.teamID1_Name : match.teamID2_Name;
+}
+
 let Match = {
 	render: async _ => {
 
 		let id = getUrlQuery().id;
-		match = getMatchById(id);
+		let match;
+		getMatchById(id).done(result => {
+			match = result[0];
+		});
 
 		let content = `
 			<div id="index" class="container">
@@ -74,25 +61,21 @@ let Match = {
 
 				<div id="single-match">
 					<div class="match-headline">
-						<h1>${match.teams[0]} VS. ${match.teams[1]}</h1>
+						<h1>${ match.teamID1_Name } VS. ${ match.teamID2_Name }</h1>
 					</div><!-- /match-headline -->
 
-					<article>
-						<h1 class="match-title">${match.title}</h1>
-						<p>${match.description}</p>
-					</article>
-
 					<div class="match-winner">
-						<h1>Winner: ${match.winner}</h1>
+						<h1>Winner: ${ matchWinner(match) }</h1>
 					</div><!-- /match-winner -->
 
 					<div class="match-stats">
-						<h1>Final Score: ${match.score[0]} : ${match.score[1]}</h1>
+						<h1>Final Score: ${ match.score1 } : ${match.score2 }</h1>
 					</div><!-- /match-stats -->
-
-					<div>
-						<p>The page may look barren right now but it is loading dynamically with js and will contain more information once the API's are implemented into the backend. Go to index.js and feel free to change the index loaded on this page</p>
-					</div>
+					
+					<article>
+						<h1 class="match-title">${ match.teamID1_Name + '\nvs.\n' + match.teamID2_Name }</h1>
+						<p>${ match.description }</p>
+					</article>
 				</div><!-- /single-match -->
 			</div><!-- /container -->
 		`;

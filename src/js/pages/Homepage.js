@@ -2,65 +2,6 @@
 // Homepage
 // ====================
 
-// This is the current dummy data for testing dynamic loads to pages
-// once the serverside has been implemented this will not be needed 
-// as match data will be loaded through our serverside as well as the
-// API's selected for the project
-
-const getMatches = _ => {
-	matches = [
-		{	
-			id: 1,
-			title: "France vs Spain",
-			teams: ["France", "Spain"],
-			score: [10, 2],
-			winner: "France",
-			description: "France faces Spain."
-		},
-		{
-			id: 2,
-			title: "Italy vs Brazil",
-			teams: ["Italy", "Brazil"],
-			score: [8, 3],
-			winner: "Brazil",
-			description: "Italy faces Brazil"
-		},
-		{
-			id: 3,
-			title: "Denmark vs  Russia",
-			teams: ["Denmark", "Russia"],
-			score: [3, 5],
-			winner: "Denmark",
-			description: "Denmark faces Russia"
-		},
-		{
-			id: 4,
-			title: "Poland vs Belgium",
-			teams: ["Poland", "Belgium"],
-			score: [101, 20],
-			winner: "Belgium",
-			description: "Poland faces Belgium"
-		},
-	];
-
-	return matches;
-}
-
-const getMatchesAjax = _ => {
-	
-	let response = '';
-
-	return $.ajax({
-		type: 'GET',
-		datatype: 'jsonp',
-		url: 'https://footlib-backend.herokuapp.com/matches',
-		async: false,
-		success: data => {
-			console.log(data);
-		}
-	});
-}
-
 const getRecentMatches = _ => {
 	recentMatches = [
 		{
@@ -82,6 +23,21 @@ const getRecentMatches = _ => {
 	]
 
 	return recentMatches;
+}
+
+const getMatchesAjax = _ => {
+
+	let url = 'https://footlib-backend.herokuapp.com/matches';
+
+	return $.ajax({
+		type: 'GET',
+		datatype: 'jsonp',
+		url: url,
+		async: false,
+		success: data => {
+			console.log(data);
+		}
+	});
 }
 
 // builds the html for a full set of match cards given a list of match objects
