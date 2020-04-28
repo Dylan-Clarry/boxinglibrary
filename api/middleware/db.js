@@ -1,5 +1,6 @@
+
 const mysql = require('mysql')
-const conn = mysql.createConnection({
+const conn = mysql.createPool({
     host: 'us-cdbr-iron-east-01.cleardb.net',
     user: 'bf69ec0a6976da',
     password: '556a07c1',
@@ -7,11 +8,12 @@ const conn = mysql.createConnection({
   })
   
   
-  
-  conn.connect(function(err) {
-      if (err) throw err;
-      
-      console.log('mysql connected')
-      
-  });
-  module.exports = conn;
+/*  
+conn.connect(function(err) {
+    if (err) throw err;
+    
+    console.log('mysql connected')
+    
+});
+*/
+module.exports = conn;
