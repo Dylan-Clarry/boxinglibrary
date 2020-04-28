@@ -36,16 +36,27 @@ var stok = require('../../nodemon.json')
 //test
 
 
+//pool.getConnection(function(err, connection) {});
+
+
+
 
 // get list of users
 router.get('/users',checkAuth, (req,res,next)=>{
-    let sql = "select * FROM users"
-	console.log(conn);
-	conn.query(sql,(err,result)=>{
-		if(err) throw err;
-		console.log(result);
-		res.send(result);
-	});
+    
+    console.log(conn);
+    conn.getConnection(function(err, connection) {
+        if (err) throw err; // not connected!
+        let sql = "select * FROM users"
+        conn.query(sql,(err,result)=>{
+            if(err) throw err;
+            console.log(result);
+            res.send(result);
+            
+        });
+        connection.release();
+        //if (error) throw error;
+    });
 
 });
 
@@ -88,39 +99,56 @@ router.post('/login', (req,res,next)=>{
     const pass = req.body.pass
     const username = req.body.username
     const user = {name: username}
-    let sql = "SELECT username,password FROM users  where username = ?";
-    conn.query(sql,[username],(err,result)=>{
-        
-        
-        if(err){
-            console.log("error")
+     
+    conn.getConnection(function(err, connection) {
+        if (err) throw err; // not connected!
+        let sql = "SELECT userID,username,password FROM users  where username = ?";
+        conn.query(sql,[username],(err,result)=>{
             
-        }else if(!err){
-            if(result.length >0){
+            
+            if(err){
+                console.log("error")
                 
-                bcrypt.compare(pass, result[0].password, function(err, match){
-                    if (match){
-                        console.log("password match, logging in");
-                        const accessToken = jwt.sign(user,stok.env.JWT_KEY);
-                        res.json({accessToken: accessToken,msg: "logged in"})
-                    }else{
-                        
-                        console.log("pass does not match");
-                        res.send("pass does not match");
-                    }
-                });
-            }else{
-                res.send("wrong username, please correct or sign up");
+            }else if(!err){
+                if(result.length >0){
+                    
+                    bcrypt.compare(pass, result[0].password, function(err, match){
+                        if (match){
+                            console.log("password match, logging in");
+                            const accessToken = jwt.sign(user,stok.env.JWT_KEY);
+                            console.log(result[0].userID);
+                            res.json({
+                                        userID: result[0].userID,
+                                        loggedin: true,
+                                        accessToken: accessToken
+                                            
+                                    })
+                        }else{
+                            
+                            console.log("pass does not match");
+                            res.json({
+                                loggedin: false,
+                                msg: 'wrong password, please correct'
+                            });
+                        }
+                    });
+                }else{
+                    res.json({
+                                loggedin: false,
+                                msg: 'wrong username, please correct or signup'
+                            });
+                }
             }
-        }
 
-        
+            
 
-        
-		
-        
+            
+            
+            
+        });
+        connection.release();
+        //if (error) throw error;
     });
-    
     
     
 });
@@ -137,22 +165,35 @@ router.post('/signup',  (req,res,next)=>{
 
         req.body.pass = hash;
         console.log(req.body.pass);
-
-        let sql = "insert into users(username,password,email) values ?";
-        const values = [[req.body.username,req.body.pass,req.body.email]];
-        conn.query(sql,[values],(err,result)=>{
-            console.log(result);
-            if(err){
-                if(err.code == 'ER_DUP_ENTRY' || err.errno == 1062){
-                    console.log('username, pass and error must be unique');
-                    res.send('username, pass and error must be unique')
-                }else{
-                    throw err;
+        conn.getConnection(function(err, connection) {
+            if (err) throw err; // not connected!
+            let sql = "insert into users(username,password,email) values ?";
+            const values = [[req.body.username,req.body.pass,req.body.email]];
+            conn.query(sql,[values],(err,result)=>{
+                console.log(result);
+                if(err){
+                    if(err.code == 'ER_DUP_ENTRY' || err.errno == 1062){
+                        console.log('credentials exist, make sure all are unique');
+                        res.json({
+                            signup: false,
+                            exists: true,
+                            msg: 'credentials exist, make sure all are unique'
+                        });
+                    }else{
+                        throw err;
+                    }
                 }
-            }
-            console.log(result);
-            res.send(result);
-	    });
+                console.log(result);
+                res.json({
+                    signup: true,
+                    exists: false,
+                    msg: 'registration successful'
+                });
+                
+            });
+            connection.release();
+            //if (error) throw error;
+        });
     });
 //================================================================================================================================================================================================
 //================================================================================================================================================================================================
@@ -166,22 +207,25 @@ router.delete('/delete',checkAuth, (req,res,next)=>{
 
 
     
-    
-    let sql = "delete from users where userID = ?;"
-    conn.query(sql,[req.body.userID],(err,result)=>{
-        if(err) throw err;
-        if(result.affectedRows == 0){
-            console.log("that account you want to delete does not exist");
-            res.send("that account you want to delete does not exist")
-        }else if(result.affectedRows == 1){
-            console.log(result+" account exists: logging in");
-            res.send(result);
+    conn.getConnection(function(err, connection) {
+        if (err) throw err; // not connected!
+        let sql = "delete from users where userID = ?;"
+        conn.query(sql,[req.body.userID],(err,result)=>{
+            if(err) throw err;
+            if(result.affectedRows == 0){
+                console.log("that account you want to delete does not exist");
+                res.send("that account you want to delete does not exist")
+            }else if(result.affectedRows == 1){
+                console.log(result+" account exists: logging in");
+                res.send(result);
+                
+            }
             
-        }
-		
-        
+            
+        });
+        connection.release();
+        //if (error) throw error;
     });
-    
 });
 
 function authenticate(req,res,next){
